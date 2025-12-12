@@ -1,4 +1,11 @@
 import express from "express";
+<<<<<<< HEAD:routes/auth.routes.js
+import { signUp, signIn } from "../controllers/authController.js";
+import { authenticate } from "../middleware/authmiddleware.js";
+import { authorizeRoles } from "../middleware/rolemiddleware.js";
+const router = express.Router();
+
+=======
 import { signUp, signIn } from "../controllers/auth.controller.js";
 import { authenticate } from "../middleware/auth.middleware.js";
 import { authorizeRoles } from "../middleware/role.middleware.js";
@@ -6,32 +13,19 @@ import { authorizeRoles } from "../middleware/role.middleware.js";
 const router = express.Router();
 
 
+>>>>>>> b69bdeb5c18196e52855ae9aafa4aa44d83b7f2e:routes/authRoutes.js
 router.post("/signup", signUp);
 router.post("/signin", signIn);
 
 
 router.get("/profile", authenticate, (req, res) => {
- 
-  res.json({ ok: true, user: req.user });
+  res.json({ user: req.user });
 });
-
 
 router.get("/hr-only", authenticate, authorizeRoles(["hr"]), (req, res) => {
-  res.json({ ok: true, message: "Welcome HR", user: req.user });
+  res.json({ message: "Welcome HR" });
 });
 
 
-router.get("/accountant-only", authenticate, authorizeRoles(["accountant"]), (req, res) => {
-  res.json({ ok: true, message: "Welcome Accountant" });
-});
-
-
-router.get("/payroll", authenticate, authorizeRoles(["hr", "accountant"]), (req, res) => {
-  res.json({ ok: true, message: "Payroll access", role: req.user.role });
-});
 
 export default router;
-
-
-
-
