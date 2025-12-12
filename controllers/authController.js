@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from '../models/userModel.js';
+import User from "../models/User.js";
 import { response } from 'express';
 
 // Sign Up a new user
@@ -44,4 +44,4 @@ export const signIn = async (req, res) =>{
     }catch(err){
         res.status(500).json({ message: "Something went wrong"});
     }
-};
+}
