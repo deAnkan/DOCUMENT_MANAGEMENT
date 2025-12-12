@@ -1,13 +1,13 @@
 import express from "express";
-import { signup, signin } from "../controllers/authController.js";
-import { authenticate } from "../middleware?/authMiddleware.js";
-import { authorizeRoles } from "../middleware?/roleMiddleware.js";
+import { signUp, signIn } from "../controllers/authcontroller.js";
+import { authenticate } from "../middleware/authmiddleware.js";
+import { authorizeRoles } from "../middleware/rolemiddleware.js";
 
 const router = express.Router();
 
 
-router.post("/signup", signup);
-router.post("/signin", signin);
+router.post("/signup", signUp);
+router.post("/signin", signIn);
 
 
 router.get("/profile", authenticate, (req, res) => {
