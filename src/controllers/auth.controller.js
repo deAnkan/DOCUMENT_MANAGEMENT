@@ -6,14 +6,25 @@ import { User } from "../models/user.model.js";
 // Sign Up a new user
 export const signUp = async (req, res) => {
     try {
-        const { username, email, password, role } = req.body;
+        const { name, email, password, role } = req.body;
 
+        //validation check
+
+          if (!name || !email || !password) {     
+        return res.status(400).json({
+    message: "All fields are required"
+});
+}
+            
+        //existance check
         const exists = await User.findOne({ email });
+
         if (exists) {
             return res.status(400).json({ message: "email already exists" });
         }
+        //hash password
         const hashedPassword = await bcrypt.hash(password, 12);
-
+        //create user
         const user = await User.create(
             {
                 name,
@@ -22,11 +33,7 @@ export const signUp = async (req, res) => {
                 role
             });
         return res.status(201).json({ message: "User created successfully", user });
-        if (!name || !email || !password) {     
-        return res.status(400).json({
-    message: "All fields are required"
-});
-}
+     
     
     } catch (err) {
         console.error("SIGNUP ERROR:", err.message); 
@@ -37,6 +44,12 @@ export const signUp = async (req, res) => {
 };
 // Sign In a user
 export const signIn = async (req, res) => {
+
+     if (!email || !password) {              
+    return res.status(400).json({
+    message: "Email and password required"
+});
+}
     try {
         const { email, password } = req.body;
         // email chech
@@ -63,11 +76,7 @@ export const signIn = async (req, res) => {
     },
     token,
     });
-        if (!email || !password) {              
-    return res.status(400).json({
-    message: "Email and password required"
-});
-}
+       
 
     } catch (err) {
         console.error("SIGNIN ERROR:", err.message); 
