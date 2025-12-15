@@ -31,7 +31,7 @@ export const signUp = async (req, res) => {
 export const signIn = async (req, res) => {
     try {
         const { email, password } = req.body;
-        // email chech
+        // email check
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: "User doesn't exist" });
         // password check
