@@ -6,7 +6,7 @@ import { response } from 'express';
 // Sign Up a new user
 export const signUp = async (req, res) => {
     try {
-        const { username, email, password, role } = req.body;
+        const { name, email, password, role } = req.body;
 
         const exists = await User.findOne({ email });
         if (exists) {
@@ -16,7 +16,7 @@ export const signUp = async (req, res) => {
 
         const user = await User.create(
             {
-                username,
+                name,
                 email,
                 password: hashedPassword,
                 role
