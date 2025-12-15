@@ -1,12 +1,12 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from "../models/user.model.js";
-import { response } from 'express';
+
 
 // Sign Up a new user
 export const signUp = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { username, email, password, role } = req.body;
 
         const exists = await User.findOne({ email });
         if (exists) {
@@ -22,28 +22,56 @@ export const signUp = async (req, res) => {
                 role
             });
         return res.status(201).json({ message: "User created successfully", user });
-
+        if (!name || !email || !password) {     
+        return res.status(400).json({
+    message: "All fields are required"
+});
+}
+    
     } catch (err) {
+        console.error("SIGNUP ERROR:", err.message); 
         res.status(500).json({ message: "Something went wrong" });
+        
+
     }
 };
 // Sign In a user
 export const signIn = async (req, res) => {
     try {
         const { email, password } = req.body;
-        // email check
+        // email chech
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: "User doesn't exist" });
         // password check
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
+        // role check
+        if (role && user.role !== role) {
+            return res.status(403).json({ message: "Access denied for this role" });
+        }
 
         const token = jwt.sign({ id: user._id, role: user.role },
             process.env.JWT_SECRET,
-            { expiresIn: process.env.JWT_EXPIRES_IN });
-        res.status(200).json({ result: user, token });
-        response.status(200).json({ message: "User signed in successfully", user, token });
+            { expiresIn: process.env.JWT_EXPIRES_IN || "1h" });
+        return res.status(200).json({
+    message: "User signed in successfully",
+    user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+    },
+    token,
+    });
+        if (!email || !password) {              
+    return res.status(400).json({
+    message: "Email and password required"
+});
+}
+
     } catch (err) {
+        console.error("SIGNIN ERROR:", err.message); 
+
         res.status(500).json({ message: "Something went wrong" });
     }
 }
