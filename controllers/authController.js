@@ -1,12 +1,12 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from "../models/User.js";
+import User from "../models/user.model.js";
 import { response } from 'express';
 
 // Sign Up a new user
 export const signUp = async (req, res) =>{
     try{
-        const { username, email, password, role = 'user' } = req.body;
+        const { name, email, password, role = 'user' } = req.body;
 
         const exists = await User.findOne({ email });
         if(exists){
@@ -15,7 +15,7 @@ export const signUp = async (req, res) =>{
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = await User.create(
-            {username, 
+            {   name, 
                 email, 
                 password: hashedPassword 
             });
