@@ -16,9 +16,8 @@ export const uploadDocument = async (req, res) => {
         });
 
         const document = await Document.create({
-            user: req.user._id,   
+            user: req.user._id,
             fileurl: result.secure_url,
-            publicId: result.public_id
 
         });
         res.status(201).json({message: "Document uploaded successfully", document});
@@ -37,7 +36,7 @@ export const hrActionDocument = async (req, res) => {
     const { documentid } = req.params;
     const { action, message } = req.body;
 
-    const document = await Document.findByid(documentid);
+    const document = await Document.findById(documentid);
 
     if (!document){
         return res.status(404).json({message: "Document not found"});
@@ -67,7 +66,7 @@ export const accontantDocument = async (req, res) => {
     const { documentid } = req.params;
     const { amount } = req.body;
 
-     const document = await Document.findByid(documentid);
+    const document = await Document.findById(documentid);
 
     if (!document){
         return res.status(404).json({message: "Document not found"});
