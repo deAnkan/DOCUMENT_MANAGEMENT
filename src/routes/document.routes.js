@@ -2,7 +2,7 @@ import express from "express";
 import {
   uploadDocument,
   hrActionDocument,
-  accontantDocument
+  accountantDocument
 } from "../controllers/document.controller.js";
 
 import { authenticate } from "../middleware/auth.middleware.js";
@@ -14,13 +14,13 @@ const router = express.Router();
 router.post(
   "/upload",
   authenticate,
-  authorizeRoles("user"),
+  authorizeRoles("hr"),
   uploadDocument
 );
 
 // HR approves / rejects
 router.put(
-  "/hr-action/:documentid",
+  "/hr-action/:documentId",
   authenticate,
   authorizeRoles("hr"),
   hrActionDocument
@@ -28,10 +28,10 @@ router.put(
 
 // ACCOUNTANT releases amount
 router.put(
-  "/accountant-action/:documentid",
+  "/accountant-action/:documentId",
   authenticate,
   authorizeRoles("accountant"),
-  accontantDocument
+  accountantDocument
 );
 
 export default router;
