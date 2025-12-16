@@ -11,13 +11,14 @@ export const uploadDocument = async (req, res) => {
         
         }
 
-        const result = await cloudinary.uploader.upload(req.files.file.path, {
+        const result = await cloudinary.uploader.upload(req.file.path, {
             folder: "documents"
         });
 
         const document = await Document.create({
-            user: req.user._id,
+            user: req.user._id,   
             fileurl: result.secure_url,
+            publicId: result.public_id
 
         });
         res.status(201).json({message: "Document uploaded successfully", document});
@@ -78,7 +79,7 @@ export const accontantDocument = async (req, res) => {
     }
 
     else {
-        document.status = "ACOUNTANT_APPROVED";
+        document.status = "ACOUNTANT_AMOUNT_RELEASED";
         document.amountReleased = amount;
         document.accontantMessage = "Amount released by accountant";
         document.accontantActionAt = Date.now();
@@ -89,3 +90,48 @@ export const accontantDocument = async (req, res) => {
 
 
 }
+
+//resubmition after rejection
+
+export const resubmitDocument = async (req, res) => {
+
+try{
+    const { documentId } = req.params;
+    const document = await Document.findOne({
+      _id: documentId,
+      user: req.user._id
+    });
+
+
+    if (!document){
+        return res.status(404).json({message: "Document not found"});
+    }
+
+    if (document.status !== "HR_REJECTED") {
+        return res.status(400).json({message: "only rejected documents can be resubmitted"});
+
+    }
+
+    if (document.publicId) {
+      await cloudinary.uploader.destroy(document.publicId);
+    }
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+        folder:"documents"
+    })
+
+    document.fileurl = result.secure_url;
+    document.publicId = result.public_id;
+    document.status = "SUBMITTED";
+    document.submittedAt = Date.now();
+    document.hrMessage = "";
+    document.accountantMessage = "";
+
+    await document.save();
+    res.status(200).json({message: "document resubmitted successfully ", document});
+  
+} catch (error) {
+    res.status(500).json({message: "something went wrong"});
+
+}
+};

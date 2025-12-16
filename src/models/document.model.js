@@ -16,7 +16,7 @@ const documentSchema = new Schema({
     status:
          {
             type: String,
-            enum: ["PENDING", "HR_APPROVED", "HR_REJECTED", "ACCOUNTANT_APPROVED"],
+            enum: ["PENDING", "HR_APPROVED", "HR_REJECTED", "ACOUNTANT_AMOUNT_RELEASED"],
             default: "PENDING"
          },
     hrMessage:
@@ -26,7 +26,7 @@ const documentSchema = new Schema({
     },
     accountantMessage:
     {
-        type: String
+        type: String,
     },
     amountReleased:
     {
@@ -46,8 +46,6 @@ const documentSchema = new Schema({
     {
         type: Date
     }
+});
 
-
-})
-
-export const document = mongoose.model("Document", documentSchema)
+export const Document = mongoose.model("Document", documentSchema)
