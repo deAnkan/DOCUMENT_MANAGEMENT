@@ -3,22 +3,22 @@ import mongoose, { Schema} from "mongoose";
 const documentSchema = new Schema({
 
     user:
-       {
+    {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
-       },
-    fileurl:
-         {
+    },
+    fileUrl:
+        {
             type: String,
             required: true,
-         },
+        },
     status:
-         {
+        {
             type: String,
             enum: ["PENDING", "HR_APPROVED", "HR_REJECTED", "ACCOUNTANT_APPROVED"],
             default: "PENDING"
-         },
+        },
     hrMessage:
     {
         type: String,
