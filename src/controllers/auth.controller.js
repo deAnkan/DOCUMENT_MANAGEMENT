@@ -16,7 +16,7 @@ export const signUp = async (req, res) => {
 });
 }
             
-        //existance check
+        //existence check
         const exists = await User.findOne({ email });
 
         if (exists) {
@@ -47,7 +47,7 @@ export const signUp = async (req, res) => {
 // Sign In an existing user
 export const signIn = async (req, res) => {
     try {
-        const { email, password, role } = req.body; // ✅ MOVED UP
+        const { email, password, role } = req.body; 
 
         // validation check
         if (!email || !password) {

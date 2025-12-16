@@ -14,7 +14,7 @@ const router = express.Router();
 router.post(
   "/upload",
   authenticate,
-  authorizeRoles("USER"),
+  authorizeRoles("user"),
   uploadDocument
 );
 
@@ -22,7 +22,7 @@ router.post(
 router.put(
   "/hr-action/:documentid",
   authenticate,
-  authorizeRoles("HR"),
+  authorizeRoles("hr"),
   hrActionDocument
 );
 
@@ -30,7 +30,7 @@ router.put(
 router.put(
   "/accountant-action/:documentid",
   authenticate,
-  authorizeRoles("ACCOUNTANT"),
+  authorizeRoles("accountant"),
   accontantDocument
 );
 
