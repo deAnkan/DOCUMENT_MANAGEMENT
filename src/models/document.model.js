@@ -13,11 +13,14 @@ const documentSchema = new Schema({
             type: String,
             required: true,
         },
+    publicId: {
+            type: String
+    },
     status:
         {
             type: String,
-            enum: ["PENDING", "HR_APPROVED", "HR_REJECTED", "ACOUNTANT_AMOUNT_RELEASED"],
-            default: "PENDING"
+            enum: ["SUBMITTED", "HR_APPROVED", "HR_REJECTED", "ACCOUNTANT_AMOUNT_RELEASED"],
+            default: "SUBMITTED"
         },
     hrMessage:
     {
@@ -42,7 +45,7 @@ const documentSchema = new Schema({
     {
         type: Date
     },
-    accontantActionAt:
+    accountantActionAt:
     {
         type: Date
     }
