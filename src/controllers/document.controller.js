@@ -1,4 +1,4 @@
-import cloudinary from "../config/cloudinary.js";
+import uploadToCloudinary from "../config/cloudinary.js";
 import { Document } from "../models/document.model.js";
 
 //upload document
@@ -6,27 +6,24 @@ import { Document } from "../models/document.model.js";
 export const uploadDocument = async (req, res) => {
     try {
         
-        if(!req.files) {
-        return res.status(400).json({message: "No file uploaded"});
-        
+        const fileRef = req?.file
+        if(!fileRef){
+            return  res.status(400).json({message: "No file uploaded"});
         }
 
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "documents"
+        const uploadResult = await uploadToCloudinary(fileRef.path, "documents");
+
+
+        console.log("Upload Result:", uploadResult);
+
+        return res.status(200).json({
+            message: "File uploaded successfully",
+            fileUrl: uploadResult.secure_url,
+            publicId: uploadResult.public_id
         });
-
-        const document = await Document.create({
-            user: req.user._id,
-            fileUrl: result.secure_url,
-
-        });
-        res.status(201).json({message: "Document uploaded successfully", document});
-
-
-
     } catch (error) {
-        console.log("res.status 500");
-        res.status(500).json({message: "Something went wrong"});
+        console.error(error);
+        res.status(500).json({message: error.message});
     }
 };
 
