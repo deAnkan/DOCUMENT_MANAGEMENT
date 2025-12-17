@@ -1,4 +1,4 @@
-import cloudinary from 'cloudinary';
+import cloudinary from "../config/cloudinary.js";
 import { Document } from "../models/document.model.js";
 
 //upload document
@@ -45,7 +45,7 @@ export const hrActionDocument = async (req, res) => {
 
     if (action === "APPROVED") {
         document.status = "HR_APPROVED";
-        document.hrMessage = "APPROVED BY HR"
+        document.hrMessage = message || "APPROVED BY HR"
 
     }
 
@@ -60,7 +60,7 @@ export const hrActionDocument = async (req, res) => {
     res.status(200).json({message: "Document action completed successfully", document});
 };
 
-//accountant approve and release amont
+//accountant approve and release amount
 
 export const accountantDocument = async (req, res) => {
     const { documentId } = req.params;
