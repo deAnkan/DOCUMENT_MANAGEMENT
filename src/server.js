@@ -4,25 +4,25 @@ import cors from "cors";
 import documentRoutes from "./routes/document.routes.js";
 import authRoutes from "./routes/auth.route.js";
 import { connectDB } from "./config/db.js";
-import { upload } from "./middleware/multer.middleware.js";
+
 const app = express();
 
-// Middleware
+//  Middleware FIRST
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(upload.single("file"));
-// Routes
+
+//  Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/documents", documentRoutes);
 
 app.get("/", (req, res) => {
-res.send("Auth backend running...");
+  res.send("Auth backend running...");
 });
 
-// Start server after DB connection
+//  Start server
 connectDB().then(() => {
-app.listen(process.env.PORT || 4000, () => {
+  app.listen(process.env.PORT || 4000, () => {
     console.log(`Server running on port ${process.env.PORT || 4000}`);
-});
+  });
 });
