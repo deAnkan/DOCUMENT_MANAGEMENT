@@ -16,7 +16,7 @@ router.post(
   "/upload",
   authenticate,
   authorizeRoles("user"),
-  upload.single("file"),
+  upload.single("document"),
   uploadDocument
 );
 

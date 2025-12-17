@@ -32,7 +32,9 @@ export const signUp = async (req, res) => {
                 password: hashedPassword,
                 role
             });
+        console.log("SIGNUP SUCCESS:", user.email);
         return res.status(201).json({ message: "User created successfully", user });
+        
     
     
     } catch (err) {
@@ -79,6 +81,7 @@ export const signIn = async (req, res) => {
             { expiresIn: process.env.JWT_EXPIRES_IN || "1h" }
         );
 
+        console.log("SIGNIN SUCCESS:", user.email);
         return res.status(200).json({
             message: "User signed in successfully",
             user: {
