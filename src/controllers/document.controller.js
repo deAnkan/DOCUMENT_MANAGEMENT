@@ -25,6 +25,7 @@ export const uploadDocument = async (req, res) => {
 
 
     } catch (error) {
+        console.log("res.status 500");
         res.status(500).json({message: "Something went wrong"});
     }
 };

@@ -19,6 +19,7 @@ export const authenticate = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = await User.findById(decoded.id).select("-password");
+    req.user.role = decoded.role; // Attach role from token
 
     if (!req.user) {
         return res.status(401).json({ message: "User not found" });

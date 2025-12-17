@@ -23,7 +23,7 @@ const userSchema = new Schema(
         {
             type: String,
             enum: ["hr", "accountant", "user"],
-            default:" user",
+            default:"user",
         },
     },  {timestamps: true})
 
