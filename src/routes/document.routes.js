@@ -14,7 +14,7 @@ const router = express.Router();
 router.post(
   "/upload",
   authenticate,
-  authorizeRoles("hr"),
+  authorizeRoles("user"),
   uploadDocument
 );
 
