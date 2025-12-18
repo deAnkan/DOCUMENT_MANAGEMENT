@@ -16,11 +16,18 @@ export const uploadDocument = async (req, res) => {
 
         console.log("Upload Result:", uploadResult);
 
-        return res.status(200).json({
-            message: "File uploaded successfully",
-            fileUrl: uploadResult.secure_url,
-            publicId: uploadResult.public_id
-        });
+        const document = await Document.create({
+      user: req.user._id,                 // logged-in user
+      fileUrl: uploadResult.secure_url,
+      publicId: uploadResult.public_id,
+      status: "SUBMITTED"
+    });
+
+       return res.status(201).json({
+      message: "File uploaded successfully",
+      documentId: document._id,           // ✅ THIS IS documentId
+      document
+    });
     } catch (error) {
         console.error(error);
         res.status(500).json({message: error.message});
@@ -33,7 +40,7 @@ export const uploadDocument = async (req, res) => {
 export const hrActionDocument = async (req, res) => {
     try {
         const { documentId } = req.params;
-        const { action, message } = req.body;
+        const { action, message } = req.body || {};
     
         const document = await Document.findById(documentId);
     
@@ -68,7 +75,7 @@ export const hrActionDocument = async (req, res) => {
 export const accountantDocument = async (req, res) => {
    try {
      const { documentId } = req.params;
-     const { amount } = req.body;
+     const { amount } = req.body || {};
  
      const document = await Document.findById(documentId);
  
