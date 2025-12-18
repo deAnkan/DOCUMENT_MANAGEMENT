@@ -5,6 +5,7 @@ import morgan from "morgan";
 import documentRoutes from "./routes/document.routes.js";
 import authRoutes from "./routes/auth.route.js";
 import { connectDB } from "./config/db.js";
+import hrRoutes from "./routes/hr.routes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(morgan("dev"));
 //  Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/documents", documentRoutes);
+app.use("/api/hr", hrRoutes);
 
 app.get("/", (req, res) => {
   res.send("Auth backend running...");
