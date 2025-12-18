@@ -25,6 +25,19 @@ const userSchema = new Schema(
             enum: ["hr", "accountant", "user"],
             default:"user",
         },
+        otp: 
+        {
+            type: String
+        },
+        otpExpiresAt: 
+        {
+            type: Date
+        },
+        isVerified: 
+        {
+            type: Boolean,
+            default: false
+        }
     },  {timestamps: true})
 
 export const User = mongoose.model("User", userSchema)
