@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from "../models/user.model.js";
-
+import transporter from '../config/nodemailer.js';
 
 // Sign Up a new user
 export const signUp = async (req, res) => {
@@ -32,9 +32,22 @@ export const signUp = async (req, res) => {
                 password: hashedPassword,
                 role
             });
+
+            //send welcome email 
+            const mailOptions = {
+                from : process.env.SENDER_EMAIL,
+                to: user.email,
+                subject: "Welcome to Our Platform!",
+                text: `Hello ${user.name},\n\nThank you for signing up on our platform. We're excited to have you on board!\n\nBest regards,\nThe Team`     
+            };
+
+            await transporter.sendMail(mailOptions);
+
         console.log("SIGNUP SUCCESS:", user.email);
         return res.status(201).json({ message: "User created successfully", user });
+
         
+
     
     
     } catch (err) {
@@ -95,6 +108,21 @@ export const signIn = async (req, res) => {
 
     } catch (err) {
         console.error("SIGNIN ERROR:", err.message);
+        return res.status(500).json({ message: "Something went wrong" });
+    }
+};
+
+
+// Logout user (JWT-based)
+export const logOut = async (req, res) => {
+    try {
+        console.log("LOGOUT SUCCESS");
+
+        return res.status(200).json({
+            message: "User logged out successfully"
+        });
+    } catch (err) {
+        console.error("LOGOUT ERROR:", err.message);
         return res.status(500).json({ message: "Something went wrong" });
     }
 };
