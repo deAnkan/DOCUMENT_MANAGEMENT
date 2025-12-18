@@ -7,7 +7,10 @@ const router = express.Router();
 
 router.post("/signup", signUp);
 router.post("/signin", signIn);
-
+router.post("/signout", (req, res) => {
+  // Invalidate the token on client side
+  res.json({ message: "Signed out successfully" });
+});
 
 router.get("/profile", authenticate, (req, res) => {
   res.json({ user: req.user });
