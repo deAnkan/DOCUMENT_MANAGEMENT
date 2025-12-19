@@ -1,15 +1,15 @@
 import express from "express";
-import { signUp, signIn, verifyOtp } from "../controllers/auth.controller.js";
+import { signUp, signIn, verifyOtp, forgetPassword, verifyForgetPasswordOtp } from "../controllers/auth.controller.js";
 import { authenticate } from "../middleware/auth.middleware.js";
 import { authorizeRoles } from "../middleware/role.middleware.js";
-
 const router = express.Router();
 
 // Auth routes
 router.post("/signup", signUp);
 router.post("/verify-otp", verifyOtp);
 router.post("/signin", signIn);
-
+router.post("/forget-password", forgetPassword);
+router.post("/reset-password", verifyForgetPasswordOtp);
 router.post("/signout", (req, res) => {
   // Token invalidation handled on client side
   res.json({ message: "Signed out successfully" });
