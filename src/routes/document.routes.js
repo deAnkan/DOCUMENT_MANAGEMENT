@@ -2,7 +2,8 @@ import express from "express";
 import {
   uploadDocument,
   hrActionDocument,
-  accountantDocument
+  accountantDocument,
+  resubmitDocument
 } from "../controllers/document.controller.js";
 
 import { authenticate } from "../middleware/auth.middleware.js";
@@ -36,4 +37,12 @@ router.put(
   accountantDocument
 );
 
+// resubmission of document by user after rejection
+router.post(
+  "/resubmit/:documentId",
+  authenticate,
+  authorizeRoles("user"),
+  upload.single("file"),
+  resubmitDocument
+);
 export default router;
