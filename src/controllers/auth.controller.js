@@ -272,10 +272,17 @@ export const verifyForgetPasswordOtp = async (req, res) => {
         return res.status(400).json({ message: "Invalid or expired OTP" });
     }
     const hashedPassword = await bcrypt.hash(newPassword, 12);
-    user.password = hashedPassword;
-    user.otp = undefined;
-    user.otpExpiresAt = undefined;
-    await user.save();
+
+    await User.findByIdAndUpdate(
+        user._id, 
+        { 
+            $set: { password: hashedPassword }, 
+            $unset: { otp: 1, otpExpiresAt: 1 }
+        });
+    // user.password = hashedPassword;
+    // user.otp = undefined;
+    // user.otpExpiresAt = undefined;
+    // await user.save();
 
     // send reset password email
     const resetmail = {
