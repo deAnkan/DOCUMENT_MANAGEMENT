@@ -18,15 +18,15 @@ export const uploadDocument = async (req, res) => {
 
         const document = await Document.create({
       user: req.user._id,                 // logged-in user
-      fileUrl: uploadResult.secure_url,
-      publicId: uploadResult.public_id,
-      status: "SUBMITTED"
+    fileUrl: uploadResult.secure_url,
+    publicId: uploadResult.public_id,
+    status: "SUBMITTED"
     });
 
-       return res.status(201).json({
-      message: "File uploaded successfully",
+        return res.status(201).json({
+        message: "File uploaded successfully",
       documentId: document._id,           // ✅ THIS IS documentId
-      document
+        document
     });
     } catch (error) {
         console.error(error);
@@ -73,34 +73,34 @@ export const hrActionDocument = async (req, res) => {
 //accountant approve and release amount
 
 export const accountantDocument = async (req, res) => {
-   try {
-     const { documentId } = req.params;
-     const { amount } = req.body || {};
- 
-     const document = await Document.findById(documentId);
- 
-     if (!document){
-         return res.status(404).json({message: "Document not found"});
- 
-     }
- 
-     if(document.status !== "HR_APPROVED") {
-         return res.status(400).json({message: "Document not approved by HR"});
-     }
- 
-     else {
-         document.status = "ACCOUNTANT_AMOUNT_RELEASED";
-         document.amountReleased = amount;
-         document.accountantMessage = "Amount released by accountant";
-         document.accountantActionAt = Date.now();
- 
-         await document.save();
-         res.status(200).json({message: "Amount released successfully", document});
-     }
- 
-   } catch (error) {
-     res.status(500).json({message: error.message});
-   }
+    try {
+    const { documentId } = req.params;
+    const { amount } = req.body || {};
+
+    const document = await Document.findById(documentId);
+
+    if (!document){
+        return res.status(404).json({message: "Document not found"});
+
+    }
+
+    if(document.status !== "HR_APPROVED") {
+        return res.status(400).json({message: "Document not approved by HR"});
+    }
+
+    else {
+        document.status = "ACCOUNTANT_AMOUNT_RELEASED";
+        document.amountReleased = amount;
+        document.accountantMessage = "Amount released by accountant";
+        document.accountantActionAt = Date.now();
+
+        await document.save();
+        res.status(200).json({message: "Amount released successfully", document});
+    }
+    
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
 
 }
 
@@ -111,8 +111,8 @@ export const resubmitDocument = async (req, res) => {
 try{
     const { documentId } = req.params;
     const document = await Document.findOne({
-      _id: documentId,
-      user: req.user._id
+        _id: documentId,
+        user: req.user._id
     });
 
 
@@ -126,7 +126,7 @@ try{
     }
 
     if (document.publicId) {
-      await cloudinary.uploader.destroy(document.publicId);
+        await cloudinary.uploader.destroy(document.publicId);
     }
 
     const result = await cloudinary.uploader.upload(req.file.path, {
@@ -142,7 +142,7 @@ try{
 
     await document.save();
     res.status(200).json({message: "document resubmitted successfully ", document});
-  
+
 } catch (error) {
     res.status(500).json({message: error.message});
 
