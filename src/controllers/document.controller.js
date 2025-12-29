@@ -148,3 +148,35 @@ try{
 
 }
 };
+
+
+// get all documents 
+export const getAllDocuments = async (req, res) => {
+    try {
+        const documents = await Document.find()
+        .populate("user", "name email role")
+        .sort({ createdAt: -1 });
+        res.status(200).json({
+            total: documents.length,
+            documents
+        });
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+};
+
+
+// get documents uploaded by logged-in user
+export const getUserDocuments = async (req, res) => {
+    try {
+        const documents = await Document.find({ user: req.user._id })
+        .sort({ createdAt: -1 });
+        res.status(200).json({
+            total: documents.length,
+            documents
+        });
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+};   
+
