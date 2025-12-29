@@ -3,7 +3,9 @@ import {
   uploadDocument,
   hrActionDocument,
   accountantDocument,
-  resubmitDocument
+  resubmitDocument,
+  getAllDocuments,
+  getUserDocuments
 } from "../controllers/document.controller.js";
 
 import { authenticate } from "../middleware/auth.middleware.js";
@@ -46,3 +48,21 @@ router.post(
   resubmitDocument
 );
 export default router;
+
+// View all documents 
+router.get(
+  "/all",
+  authenticate,
+  authorizeRoles("hr", "accountant"),
+  getAllDocuments
+);
+
+// User views his own documents
+router.get(
+  "/my-documents",
+  authenticate,
+  authorizeRoles("user"),
+  getUserDocuments
+);
+
+// 
